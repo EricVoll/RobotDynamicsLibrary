@@ -33,4 +33,5 @@ int maxIt: The number of max iterations the numerical solution is allowed to tak
 After the maxIt was reached once, alpha is halved (making it even slower to converge but more precise and less error prone) and the algorithm is given maxIt / 2 more steps to find the optimal solution. 
 
 # Example project:
-The exmaple project uses Fanuc's CR7 collaborative robot. It is programmed in a way, that the user can move the task-space target position around and the robot will perform inverse kinematics to match the target. Factors such as alpha, lambda and maxIt can be set in the editor to see their effects.
+The exmaple project uses Fanuc's CR7 collaborative robot. It is programmed in a way, that the user can move the task-space target position and orientation around and the robot will perform inverse kinematics to match its end-effector with the target. Factors such as alpha, lambda and maxIt can be set in the editor to see their effects.
+![Example Screenshot](https://github.com/luchspeter/RobotDynamicsLibrary/blob/master/ReadmeRessources/UnityExampleScreenshot.png)
