@@ -5,15 +5,17 @@ Currently it only supports Robots, that have rotationary joints only. The mathem
 
 # How to use
 ## Step 1: Config the robot
-` Robot Ro = new Robot()
+
+```
+Robot Ro = new Robot()
                 .AddJoint('z', new Vector(0, 0, 300))
                 .AddJoint('x', new Vector(0, 50, 330))
                 .AddJoint('x', new Vector(0, 0, 440))
                 .AddJoint('y', new Vector(0, 100, 35))
                 .AddJoint('x', new Vector(0, 320, 0))
                 .AddJoint('y', new Vector(0, 80, 0));
-
- Links = Ro.Links;`
+ Links = Ro.Links;
+ ```
  
  The `Robot` class has a `List<Link>` property. When creating an instance of a `Robot` object, the `AddJoint(...)` method allows to add joints to the kinematic chain of the robot. This method takes a char that defines the axis that the next (!) joint rotates around, and an offset `Vector` that defines the eukledian distance to the next joint. The Homogenous Transformation is then calculated from the rotation axes by getting the corresponding RotationMatrix and the offset vector is inserted at its corresponding place. The offset vector is defined relative to the coordinate system of the link.
  
