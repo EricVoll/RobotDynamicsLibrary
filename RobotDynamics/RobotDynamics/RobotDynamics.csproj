@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JointController\JointController.cs" />
+    <Compile Include="JointController\JointsChangedEventArgs.cs" />
     <Compile Include="MathUtilities\HomogenousTransformation.cs" />
     <Compile Include="MathUtilities\Matrix.cs" />
     <Compile Include="MathUtilities\MatrixInversion.cs" />

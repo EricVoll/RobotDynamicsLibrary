@@ -3361,6 +3361,8 @@ MonoBehaviour:
   Target: {fileID: 2043179348}
   Lambda: 0.001
   Alpha: 0.05
+  Kp: 5
+  enableController: 1
   MaxIter: 100
 --- !u!114 &1733876490
 MonoBehaviour:
@@ -3382,7 +3384,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1733876488}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 15, y: 0, z: -63}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1507651065}

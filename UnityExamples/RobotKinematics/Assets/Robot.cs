@@ -1,4 +1,5 @@
-﻿using RobotDynamics.MathUtilities;
+﻿using RobotDynamics.Controller;
+using RobotDynamics.MathUtilities;
 using RobotDynamics.Robots;
 using System;
 using System.Collections;
@@ -10,24 +11,38 @@ public class Robot : MonoBehaviour
     public List<GameObject> Joints;
     public List<double> angles;
     public GameObject Target;
-    FanucCR7 CRobot = new FanucCR7();
+    FanucCR7 CRobot;
 
     [Range(0, 1)]
+    [Tooltip("A vlue used for pseudo inverses of matrices to stabalize in the case of singularities. Is added to the diagonal entries of the matrix before inverting.")]
     public float Lambda = 0.001f;
     [Range(0, 1)]
+    [Tooltip("Step size factor in the numeric algorithm. [q = q + dq * alpha]")]
     public float Alpha = 0.05f;
+    [Range(0, 5)]
+    [Tooltip("Proportional controller parameter used for smoothing the angles")]
+    public float Kp = 2;
+
+    public bool enableController = true;
+
     public int MaxIter = 100;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        CRobot = new FanucCR7();
+        CRobot.AttachJointController(Kp, 0.01f);
+        CRobot.JointController.jointsChangedEvent += ControlledJointsChanged;
     }
 
-    public static Vector ToVector(Vector3 v)
+    private void ControlledJointsChanged(object sender, JointsChangedEventArgs e)
     {
-        return new Vector(v.x, v.y, v.z);
+        if (!enableController) return;
+
+        if (e.DidConverge)
+            SetQ(e.joint_values);
     }
+
 
 
     Vector3 lastPos;
@@ -43,19 +58,21 @@ public class Robot : MonoBehaviour
 
             //Inverse Kinematics
             Vector r_des = ToVector(Target.transform.localPosition);
-            var v = Target.transform.localEulerAngles;
-            RotationMatrix C_des = EulerAnglesToRotationMatrix(v.x, v.y, v.z);
-            IterationResult result = CRobot.ComputeInverseKinematics(r_des, C_des, Lambda, Alpha, MaxIter);
+            RotationMatrix C_des = EulerAnglesToRotationMatrix(Target.transform);
+            var result = CRobot.ComputeInverseKinematics(r_des, C_des, Lambda, Alpha, MaxIter);
 
-            //Update robot if a converging solution was found
-            if (result.DidConverge)
+            if (!enableController && result.DidConverge)
+            {
                 SetQ(result.q);
+            }
         }
+
+        CRobot.JointController.ReportNewFrame(Time.deltaTime);
     }
 
     private void SetQ(double[] q)
     {
-        var transformations = CRobot.ComputerForwardKinematics(q);
+        var transformations = CRobot.ComputeForwardKinematics(q);
 
         for (int i = 0; i < transformations.Count - 1; i++)
         {
@@ -69,6 +86,8 @@ public class Robot : MonoBehaviour
         }
 
     }
+
+    #region Conversions
 
     private Matrix4x4 FromRotationMatrx(RotationMatrix R)
     {
@@ -87,6 +106,10 @@ public class Robot : MonoBehaviour
         return m;
     }
 
+    public static Vector ToVector(Vector3 v)
+    {
+        return new Vector(v.x, v.y, v.z);
+    }
     private RotationMatrix QuatToRotationMatrix(Quaternion quat)
     {
         double qw = quat.w;
@@ -103,11 +126,17 @@ public class Robot : MonoBehaviour
         return matrix;
     }
 
-    private RotationMatrix EulerAnglesToRotationMatrix(double x, double y, double z)
+    /// <summary>
+    /// Extracts the local Euler angles and returns a RotationMatrix
+    /// </summary>
+    /// <param name="transform"></param>
+    /// <returns></returns>
+    private RotationMatrix EulerAnglesToRotationMatrix(Transform transform)
     {
-        x = DegToRad(x);
-        y = DegToRad(y);
-        z = DegToRad(z);
+
+        double x = DegToRad(transform.localEulerAngles.x);
+        double y = DegToRad(transform.localEulerAngles.y);
+        double z = DegToRad(transform.localEulerAngles.z);
 
 
         Matrix R1 = new Matrix(new double[,]
@@ -135,4 +164,5 @@ public class Robot : MonoBehaviour
     {
         return deg / 360.0 * 2 * Math.PI;
     }
+    #endregion
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using RobotDynamics.Controller;
 
 namespace RobotDynamics.Robots
 {
@@ -15,7 +16,7 @@ namespace RobotDynamics.Robots
 
         private HomogenousTransformation T_I0;
         public List<Link> Links = new List<Link>();
-
+        public JointController JointController { get; private set; }
 
         public Robot AddJoint(char axe, Vector offset)
         {
@@ -24,12 +25,17 @@ namespace RobotDynamics.Robots
             return this;
         }
 
+        public void AttachJointController(float kp, float tolerance)
+        {
+            JointController = new JointController(kp, tolerance, Links.Count);
+        }
+
         /// <summary>
         /// Computes the forward kinematics of the defined robot
         /// </summary>
         /// <param name="q">The current joint values</param>
         /// <returns></returns>
-        public List<HomogenousTransformation> ComputerForwardKinematics(double[] q)
+        public List<HomogenousTransformation> ComputeForwardKinematics(double[] q)
         {
             List<HomogenousTransformation> hs = new List<HomogenousTransformation>();
             hs.Add(T_I0);
@@ -103,6 +109,11 @@ namespace RobotDynamics.Robots
 
             result.q = bestQ;
 
+            if(JointController != null)
+            {
+                JointController.ReportNewTargetJointValues(result.q, result.DidConverge);
+            }
+
             return result;
         }
 
@@ -147,7 +158,7 @@ namespace RobotDynamics.Robots
                 n_k.Add(link.GetN());
             }
 
-            var T_IE = ComputerForwardKinematics(q).Last();
+            var T_IE = ComputeForwardKinematics(q).Last();
             Vector r_I_IE = T_IE.GetPosition();
             I_R_E_current = T_IE.GetRotation();
 
@@ -180,8 +191,8 @@ namespace RobotDynamics.Robots
     public class IterationResult
     {
         public double[] q { get; set; }
-        public bool DidLoosenUpTolerance { get; set; }
-        public bool DidConverge { get; set; }
+        public bool DidLoosenUpTolerance { get; set; } = false;
+        public bool DidConverge { get; set; } = true;
     }
 
 }
