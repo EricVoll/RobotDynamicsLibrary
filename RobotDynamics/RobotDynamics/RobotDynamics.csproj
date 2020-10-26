@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JointController\JointController.cs" />
+    <Compile Include="JointController\JointsChangedEventArgs.cs" />
     <Compile Include="MathUtilities\HomogenousTransformation.cs" />
     <Compile Include="MathUtilities\Matrix.cs" />
     <Compile Include="MathUtilities\MatrixInversion.cs" />
@@ -46,6 +48,7 @@
     <Compile Include="MathUtilities\Vector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Robots\FanucCR7.cs" />
+    <Compile Include="Robots\Link.cs" />
     <Compile Include="Robots\Robot.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
