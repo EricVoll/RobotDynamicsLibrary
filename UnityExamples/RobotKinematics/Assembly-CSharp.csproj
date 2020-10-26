@@ -63,7 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Robot.cs" />
+    <Compile Include="Assets\RobotDynamics\Robot.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap.shader" />
@@ -264,9 +264,6 @@
     <Reference Include="UnityEditor">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.10f1/Editor/Data/Managed/UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="RobotDynamics">
-      <HintPath>C:/Users/ericv/Documents/Projects/RobotDynamicsLibrary/UnityExamples/RobotKinematics/Assets/RobotDynamics.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Analytics.Editor">
       <HintPath>C:/Users/ericv/Documents/Projects/RobotDynamicsLibrary/UnityExamples/RobotKinematics/Library/PackageCache/com.unity.analytics@3.3.5/Unity.Analytics.Editor.dll</HintPath>
     </Reference>
@@ -275,6 +272,9 @@
     </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
       <HintPath>C:/Users/ericv/Documents/Projects/RobotDynamicsLibrary/UnityExamples/RobotKinematics/Library/PackageCache/com.unity.analytics@3.3.5/AnalyticsStandardEvents/Unity.Analytics.StandardEvents.dll</HintPath>
+    </Reference>
+    <Reference Include="RobotDynamics">
+      <HintPath>C:/Users/ericv/Documents/Projects/RobotDynamicsLibrary/UnityExamples/RobotKinematics/Assets/RobotDynamics/RobotDynamics.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.4.10f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
