@@ -25,7 +25,7 @@ The number of Links is freely selectable. The forward kinematics will work with 
 The `Robot` object has a Method called `ComputeForwardKinematics(double[] q)` which takes a vector `q` as an input. The method returns all `HomogenousTransformations` of all Joints relative to the initial frame, which allows to set the position and rotation of all joints. For that the `HomogenousTransformation` class has two methods `GetPosition()` and `GetRotation()`, which respectivley return a `Vector` (3x1) and a `RotationMatrix` (3x3) object. 
 
 ## Step 3: Inverse Kinematics
-The `Robot` object has a method called `ComputeInverseKinematics(Vector x, RotationMatrix R, double alpha, double lambda, int maxIt)`, which returns an array `double[]` with the q values.
+The `Robot` object has a method called `ComputeInverseKinematics(Vector x, RotationMatrix R, double alpha, double lambda, int maxIt)`, which returns an object `IterationResult` which contains an array `double[]` with the q values, a boolean value if the algorithm converged to a solution and another one to indicate if loosening up the tolerance helped to converge.
 Vector x: The desired task-space position vector.
 RotationMatrix R: The desired orientation as a RotationMatrix object.
 double alpha: A scaling factor in the numeric solution to make it more stable in steps with big errors between the desired and current position.
@@ -34,6 +34,9 @@ int maxIt: The number of max iterations the numerical solution is allowed to tak
 
 After the maxIt was reached once, alpha is halved (making it even slower to converge but more precise and less error prone) and the algorithm is given maxIt / 2 more steps to find the optimal solution. 
 
+## Step 4: JointController
+The repository also includes a joint controller, which is a simple p controller and smooths out the movement. The controller is included in the library, and not in the Unity project, but is written in a way that it takes update calls from e.g. the Unity lifecycle. It provided an event which can be subscribed to, which contains the actual joint values which can directly be applied to the robot.
+
 # Example project:
 The exmaple project uses Fanuc's CR7 collaborative robot. It is programmed in a way, that the user can move the task-space target position and orientation around and the robot will perform inverse kinematics to match its end-effector with the target. Factors such as alpha, lambda and maxIt can be set in the editor to see their effects.
-![Example Screenshot](https://github.com/luchspeter/RobotDynamicsLibrary/blob/master/ReadmeRessources/UnityExampleScreenshot.png)
+![Example Video](./ReadmeRessources/show.gif)
