@@ -46,6 +46,7 @@
     <Compile Include="MathUtilities\Vector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Robots\FanucCR7.cs" />
+    <Compile Include="Robots\Link.cs" />
     <Compile Include="Robots\Robot.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

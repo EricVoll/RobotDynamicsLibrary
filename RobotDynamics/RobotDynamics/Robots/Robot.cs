@@ -24,7 +24,11 @@ namespace RobotDynamics.Robots
             return this;
         }
 
-
+        /// <summary>
+        /// Computes the forward kinematics of the defined robot
+        /// </summary>
+        /// <param name="q">The current joint values</param>
+        /// <returns></returns>
         public List<HomogenousTransformation> ComputerForwardKinematics(double[] q)
         {
             List<HomogenousTransformation> hs = new List<HomogenousTransformation>();
@@ -36,13 +40,22 @@ namespace RobotDynamics.Robots
             return hs;
         }
 
-        public double[] ComputeInverseKindematics(Vector I_r_IE, RotationMatrix C_IE_des, double lambda = 0.001f, double alpha = 0.05f, int max_it = 100)
+        /// <summary>
+        /// Computes the inverse kinematics of the currently defined robot.
+        /// </summary>
+        /// <param name="I_r_IE">The desired position vector of the End-Effector frame defined in the Base frame</param>
+        /// <param name="C_IE_des">The desired rotation matrix of the end-effector defined in the base frame</param>
+        /// <param name="lambda">A value added to the main diagonal of matrices when calculating the pseudo inverse to make them more stable in the case of singularities</param>
+        /// <param name="alpha">Step size to move the gradient per iteration</param>
+        /// <param name="max_it">The maximum number of iterations</param>
+        /// <returns></returns>
+        public IterationResult ComputeInverseKinematics(Vector I_r_IE, RotationMatrix C_IE_des, double lambda = 0.001f, double alpha = 0.05f, int max_it = 100, float tol = 0.1f)
         {
             var q = new Matrix(new double[Links.Count, 1]).ToVectorArray();
             int it = 0;
             var dxe = new Matrix(new double[6, 1]);
-            float tol = 0.1f;
             bool loosendUpOnce = false;
+            IterationResult result = new IterationResult();
 
             double[] bestQ = q;
             double bestNorm = Double.MaxValue;
@@ -78,12 +91,19 @@ namespace RobotDynamics.Robots
                     it /= 2;
                     tol *= 10;
                     loosendUpOnce = true;
+                    result.DidLoosenUpTolerance = true;
+                }
+                if(it == max_it -1 && loosendUpOnce)
+                {
+                    result.DidConverge = false;
                 }
 
                 it++;
             }
 
-            return bestQ;
+            result.q = bestQ;
+
+            return result;
         }
 
 
@@ -157,38 +177,11 @@ namespace RobotDynamics.Robots
 
     }
 
-
-
-
-    public class Link
+    public class IterationResult
     {
-        public Link(char axe, Vector offset)
-        {
-            this.axe = axe;
-            this.offset = offset;
-        }
-
-        char axe;
-        Vector offset;
-
-        double lastQ = -100;
-        HomogenousTransformation lastHT = null;
-        public HomogenousTransformation GetTransformation(double q)
-        {
-            if (lastQ == q) return lastHT;
-            var HT = new HomogenousTransformation(new RotationMatrix(q, axe), offset);
-            lastHT = HT;
-            return HT;
-        }
-
-        public Vector GetN()
-        {
-            if (axe == 'x') return new Vector(1, 0, 0);
-            if (axe == 'y') return new Vector(0, 1, 0);
-            if (axe == 'z') return new Vector(0, 0, 1);
-            return null;
-        }
+        public double[] q { get; set; }
+        public bool DidLoosenUpTolerance { get; set; }
+        public bool DidConverge { get; set; }
     }
-
 
 }
