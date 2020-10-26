@@ -1,8 +1,8 @@
 # RobotDynamicsLibrary
 This library contains methods to perform forward/inverse kinematics 
 
-Currently it only supports Robots, that have rotationary joints only. The mathematics model would allow translationary joints easily, but it has not been implemented yet.
-
+Currently it only supports Robots, that have rotationary joints only. The mathematics model would allow translationary joints easily, but it has not been implemented yet.  
+![Example Video](./ReadmeRessources/show.gif)
 # How to use
 ## Step 1: Config the robot
 
