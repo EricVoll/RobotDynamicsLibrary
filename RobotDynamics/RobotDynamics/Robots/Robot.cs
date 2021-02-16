@@ -55,9 +55,19 @@ namespace RobotDynamics.Robots
         /// <param name="alpha">Step size to move the gradient per iteration</param>
         /// <param name="max_it">The maximum number of iterations</param>
         /// <returns></returns>
-        public IterationResult ComputeInverseKinematics(Vector I_r_IE, RotationMatrix C_IE_des, double lambda = 0.001f, double alpha = 0.05f, int max_it = 100, float tol = 0.1f)
+        public IterationResult ComputeInverseKinematics(Vector I_r_IE, RotationMatrix C_IE_des, double lambda = 0.001f, double alpha = 0.05f, int max_it = 100, float tol = 0.1f, double[] q_0 = null)
         {
-            var q = new Matrix(new double[Links.Count, 1]).ToVectorArray();
+            double[] q;
+            if (q_0 == null)
+                q = new Matrix(new double[Links.Count, 1]).ToVectorArray();
+            else
+            {
+                if(q_0.Length != Links.Count)
+                {
+                    throw new Exception("Invalid initial q passed into inverse kinematics");
+                }
+                q = q_0;
+            }
             int it = 0;
             var dxe = new Matrix(new double[6, 1]);
             bool loosendUpOnce = false;
@@ -99,7 +109,7 @@ namespace RobotDynamics.Robots
                     loosendUpOnce = true;
                     result.DidLoosenUpTolerance = true;
                 }
-                if(it == max_it -1 && loosendUpOnce)
+                if (it == max_it - 1 && loosendUpOnce)
                 {
                     result.DidConverge = false;
                 }
@@ -109,7 +119,7 @@ namespace RobotDynamics.Robots
 
             result.q = bestQ;
 
-            if(JointController != null)
+            if (JointController != null)
             {
                 JointController.ReportNewTargetJointValues(result.q, result.DidConverge);
             }
