@@ -25,6 +25,8 @@ public class Robot : MonoBehaviour
 
     public bool enableController = true;
 
+    public bool useLastQAsInitValue = true;
+
     public int MaxIter = 100;
 
     // Start is called before the first frame update
@@ -47,6 +49,7 @@ public class Robot : MonoBehaviour
 
     Vector3 lastPos;
     Quaternion lastRot;
+    double[] last_q;
 
     // Update is called once per frame
     void Update()
@@ -59,11 +62,17 @@ public class Robot : MonoBehaviour
             //Inverse Kinematics
             Vector r_des = ToVector(Target.transform.localPosition);
             RotationMatrix C_des = EulerAnglesToRotationMatrix(Target.transform);
-            var result = CRobot.ComputeInverseKinematics(r_des, C_des, Lambda, Alpha, MaxIter);
 
-            if (!enableController && result.DidConverge)
+            var result = CRobot.ComputeInverseKinematics(r_des, C_des, Lambda, Alpha, MaxIter, 0.1f, useLastQAsInitValue ? last_q : null);
+
+            if (result.DidConverge)
             {
-                SetQ(result.q);
+                last_q = result.q;
+
+                if (!enableController)
+                {
+                    SetQ(result.q);
+                }
             }
         }
 
