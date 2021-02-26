@@ -54,6 +54,10 @@ namespace RobotDynamics.MathUtilities
         {
             return a.X * b.X + a.Y * b.Y + a.Z * b.Z;
         }
+        public static Vector operator /(Vector a, double b)
+        {
+            return new Vector(a.X / b, a.Y / b, a.Z / b);
+        }
 
         public static Vector Cross(Vector a, Vector b)
         {
@@ -92,7 +96,6 @@ namespace RobotDynamics.MathUtilities
                     case 2: return Z;
                     default:
                         throw new IndexOutOfRangeException();
-                        break;
                 }
             }
 
@@ -107,7 +110,6 @@ namespace RobotDynamics.MathUtilities
                     case 2: Z = value; break;
                     default:
                         throw new IndexOutOfRangeException();
-                        break;
                 }
             }
         }

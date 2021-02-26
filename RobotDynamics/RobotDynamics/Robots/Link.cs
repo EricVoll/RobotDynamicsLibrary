@@ -4,21 +4,55 @@ namespace RobotDynamics.Robots
 {
     public class Link
     {
-        public Link(char axe, Vector offset)
+        public enum JointType { Revolute, Linear }
+
+        public Link()
         {
-            this.axe = axe;
-            this.offset = offset;
+
+        }
+
+        public static Link Revolute(char axe, Vector offset)
+        {
+            return new Link()
+            {
+                axe = axe,
+                offset = offset,
+                type = JointType.Revolute
+            };
+        }
+
+        public static Link Linear(Vector linearMotionDirection, Vector offset)
+        {
+            return new Link()
+            {
+                offset = offset,
+                linearMotionDirection = linearMotionDirection / linearMotionDirection.Magnitude,
+                type = JointType.Linear
+            };
         }
 
         char axe;
+        JointType type;
         Vector offset;
+        Vector linearMotionDirection;
 
         double lastQ = -100;
         HomogenousTransformation lastHT = null;
+
         public HomogenousTransformation GetTransformation(double q)
         {
             if (lastQ == q) return lastHT;
-            var HT = new HomogenousTransformation(new RotationMatrix(q, axe), offset);
+
+            HomogenousTransformation HT;
+            if (type == JointType.Revolute)
+            {
+                HT = new HomogenousTransformation(new RotationMatrix(q, axe), offset);
+            }
+            else
+            {
+                HT = new HomogenousTransformation(new RotationMatrix(Matrix.Eye(3).matrix), offset + q * linearMotionDirection);
+            }
+
             lastHT = HT;
             return HT;
         }

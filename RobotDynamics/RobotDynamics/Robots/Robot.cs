@@ -20,7 +20,7 @@ namespace RobotDynamics.Robots
 
         public Robot AddJoint(char axe, Vector offset)
         {
-            Link link = new Link(axe, offset);
+            Link link = Link.Revolute(axe, offset);
             Links.Add(link);
             return this;
         }
