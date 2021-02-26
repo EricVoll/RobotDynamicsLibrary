@@ -55,10 +55,12 @@ namespace RobotDynamics.Robots
 
             lastHT = HT;
             return HT;
-        }
+        } 
 
         public Vector GetN()
         {
+            if (Type == JointType.Linear) return linearMotionDirection;
+
             if (axe == 'x') return new Vector(1, 0, 0);
             if (axe == 'y') return new Vector(0, 1, 0);
             if (axe == 'z') return new Vector(0, 0, 1);

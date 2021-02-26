@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="MathUtilitiesTests\MatrixTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RobotTests\InverseKinematicsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

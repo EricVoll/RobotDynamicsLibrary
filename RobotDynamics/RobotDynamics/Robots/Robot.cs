@@ -13,7 +13,7 @@ namespace RobotDynamics.Robots
         {
             T_I0 = new HomogenousTransformation(Matrix.Eye(4));
         }
-         
+
         private HomogenousTransformation T_I0;
         public List<Link> Links = new List<Link>();
         public JointController JointController { get; private set; }
@@ -27,12 +27,12 @@ namespace RobotDynamics.Robots
         public Robot AddLinearJoint(Vector offset, Vector linearMovementDirection)
         {
             Links.Add(Link.Linear(linearMovementDirection, offset));
-            return this; 
+            return this;
         }
 
         public void AttachJointController(float kp, float tolerance)
         {
-            JointController = new JointController(kp, tolerance, Links.Count);
+            JointController = new JointController(kp, tolerance, Links.Count, Links.Select(x => x.Type).ToArray());
         }
 
         /// <summary>
@@ -51,6 +51,11 @@ namespace RobotDynamics.Robots
             return hs;
         }
 
+        public IterationResult ComputeInverseKinematics(Vector I_r_IE, RotationMatrix C_IE_des, double lambda = 0.001f, double alpha = 0.05f, int max_it = 100, float tol = 0.1f, double[] q_0 = null)
+        {
+            return ComputeInverseKinematics(I_r_IE, C_IE_des, Matrix.Eye(Links.Count) * alpha, lambda, max_it, tol, q_0);
+        }
+
         /// <summary>
         /// Computes the inverse kinematics of the currently defined robot.
         /// </summary>
@@ -60,14 +65,14 @@ namespace RobotDynamics.Robots
         /// <param name="alpha">Step size to move the gradient per iteration</param>
         /// <param name="max_it">The maximum number of iterations</param>
         /// <returns></returns>
-        public IterationResult ComputeInverseKinematics(Vector I_r_IE, RotationMatrix C_IE_des, double lambda = 0.001f, double alpha = 0.05f, int max_it = 100, float tol = 0.1f, double[] q_0 = null)
+        public IterationResult ComputeInverseKinematics(Vector I_r_IE, RotationMatrix C_IE_des, Matrix alpha, double lambda = 0.001f, int max_it = 100, float tol = 0.1f, double[] q_0 = null)
         {
             double[] q;
             if (q_0 == null)
                 q = new Matrix(new double[Links.Count, 1]).ToVectorArray();
             else
             {
-                if(q_0.Length != Links.Count)
+                if (q_0.Length != Links.Count)
                 {
                     throw new Exception("Invalid initial q passed into inverse kinematics");
                 }
@@ -109,6 +114,7 @@ namespace RobotDynamics.Robots
                 //But only do it once.
                 if (it == max_it - 1 && !loosendUpOnce)
                 {
+                    result.numberOfIterationsPerfomred += max_it/2;
                     it /= 2;
                     tol *= 10;
                     loosendUpOnce = true;
@@ -123,6 +129,7 @@ namespace RobotDynamics.Robots
             }
 
             result.q = bestQ;
+            result.numberOfIterationsPerfomred += it;
 
             if (JointController != null)
             {
@@ -181,7 +188,14 @@ namespace RobotDynamics.Robots
             List<double[]> j = new List<double[]>();
             for (int i = 0; i < Links.Count; i++)
             {
-                j.Add(Vector.Cross(R_Ik[i] * n_k[i], r_I_IE - r_Ik[i]).ToArray());
+                if (Links[i].Type == Link.JointType.Revolute)
+                {
+                    j.Add(Vector.Cross(R_Ik[i] * n_k[i], r_I_IE - r_Ik[i]).ToArray());
+                }
+                else if (Links[i].Type == Link.JointType.Linear)
+                {
+                    j.Add((R_Ik[i] * n_k[i]).ToArray());
+                }
             }
 
             J_P = new Matrix(j.ToArray());
@@ -191,7 +205,15 @@ namespace RobotDynamics.Robots
             j = new List<double[]>();
             for (int i = 0; i < Links.Count; i++)
             {
-                j.Add((R_Ik[i] * n_k[i]).ToArray());
+
+                if (Links[i].Type == Link.JointType.Revolute)
+                {
+                    j.Add((R_Ik[i] * n_k[i]).ToArray());
+                }
+                else if (Links[i].Type == Link.JointType.Linear)
+                {
+                    j.Add(new double[] { 0, 0, 0 });
+                }
             }
             J_R = new Matrix(j.ToArray());
 
@@ -208,6 +230,7 @@ namespace RobotDynamics.Robots
         public double[] q { get; set; }
         public bool DidLoosenUpTolerance { get; set; } = false;
         public bool DidConverge { get; set; } = true;
+        public int numberOfIterationsPerfomred { get; set; }
     }
 
 }

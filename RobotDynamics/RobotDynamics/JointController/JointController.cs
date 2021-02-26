@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static RobotDynamics.Robots.Link;
 
 namespace RobotDynamics.Controller
 {
@@ -10,19 +11,21 @@ namespace RobotDynamics.Controller
     /// </summary>
     public class JointController
     {
-        public JointController(float kp, float tolerance, int DOF)
+        public JointController(float kp, float tolerance, int DOF, JointType[] types)
         {
             State = new RobotState();
             this.kp = kp;
             this.tolerance = tolerance;
             State.CurrentJointValues = new double[DOF];
             State.CurrentTargetJointValues = new double[DOF];
+            jointTypes = types;
         }
 
         public EventHandler<JointsChangedEventArgs> jointsChangedEvent;
 
         private float kp;
         private float tolerance;
+        private JointType[] jointTypes;
 
         private RobotState State { get; set; }
 
@@ -34,7 +37,8 @@ namespace RobotDynamics.Controller
         {
             for (int i = 0; i < q.Length; i++)
             {
-                q[i] %= Math.PI * 2;
+                if (jointTypes[i] == JointType.Revolute)
+                    q[i] %= Math.PI * 2;
             }
             State.CurrentTargetJointValues = q;
             State.LastIterationDidConverge = didConverge;
@@ -73,9 +77,11 @@ namespace RobotDynamics.Controller
 
             public bool JointValuesNeedUpdating { get; set; }
             public double[] CurrentJointValues { get; set; }
-            public double[] CurrentTargetJointValues {
+            public double[] CurrentTargetJointValues
+            {
                 get => currentTargetJointValues;
-                set {
+                set
+                {
                     JointValuesNeedUpdating = true;
                     currentTargetJointValues = value;
                 }
