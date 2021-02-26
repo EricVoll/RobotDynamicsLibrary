@@ -8,11 +8,9 @@ public class LinearJointHandler : JointHandler
 {
     public override void SetJointValue(HomogenousTransformation transformation, HomogenousTransformation nextTransformation, Link link, double q)
     {
-        Vector p = transformation.GetPosition(); 
-        RootObject.transform.localPosition = p.ToVector3();
-        RotationMatrix R = transformation.GetRotation();
-        RootObject.transform.localRotation = R.ToUnityMatrix().rotation;
-        LinearJoint.transform.localPosition = (link.offset + link.linearMotionDirection * q).ToVector3();
+        RootObject.transform.localPosition = transformation.GetPosition().ToVector3();
+        RootObject.transform.localRotation = transformation.GetRotation().ToUnityMatrix().rotation;
+        LinearJoint.transform.localPosition = (link.offset + link.linearMotionDirection * q).ToVector3() / RootObject.transform.localScale.x;
     }
 
     /// <summary>
