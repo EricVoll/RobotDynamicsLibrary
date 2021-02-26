@@ -1,7 +1,7 @@
 # RobotDynamicsLibrary
 This library contains methods to perform forward/inverse kinematics for revolute and linear joints!
 
-![Example Video](./ReadmeRessources/RobotDynamics.gif)
+![Example Video](./ReadmeRessources/RobotDynamcis.gif)
 # How to use
 ## Step 1: Config the robot
 
@@ -39,4 +39,4 @@ The repository also includes a joint controller, which is a simple p controller 
 
 # Example project:
 The exmaple project uses Fanuc's CR7 collaborative robot. It is programmed in a way, that the user can move the task-space target position and orientation around and the robot will perform inverse kinematics to match its end-effector with the target. Factors such as alpha, lambda and maxIt can be set in the editor to see their effects.
-![Example Video](./ReadmeRessources/RobotDynamics.gif)
+![Example Video](./ReadmeRessources/RobotDynamcis.gif)
