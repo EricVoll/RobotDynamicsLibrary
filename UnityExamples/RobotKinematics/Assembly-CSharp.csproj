@@ -56,8 +56,15 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\RobotDynamics\Robot.cs" />
+    <Compile Include="Assets\RobotDynamics\RevoluteRobot.cs" />
     <Compile Include="Assets\RobotDynamics\TargetMover.cs" />
+    <Compile Include="Assets\RobotDynamics\LinearRobot.cs" />
+    <Compile Include="Assets\RobotDynamics\Joints\JointHandler.cs" />
+    <Compile Include="Assets\RobotDynamics\Extensions.cs" />
+    <Compile Include="Assets\RobotDynamics\IJoint.cs" />
+    <Compile Include="Assets\RobotDynamics\Joints\LinearJointHandler.cs" />
+    <Compile Include="Assets\RobotDynamics\Joints\RevoluteJointHandler.cs" />
+    <Compile Include="Assets\RobotDynamics\RobotBase.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

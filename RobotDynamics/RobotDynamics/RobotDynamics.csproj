@@ -52,4 +52,7 @@
     <Compile Include="Robots\Robot.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "$(TargetDir)$(ProjectName).dll" "$(SolutionDir)..\UnityExamples\RobotKinematics\Assets\RobotDynamics\$(ProjectName).dll"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

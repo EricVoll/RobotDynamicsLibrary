@@ -17,7 +17,7 @@ namespace RobotDynamics.Robots
             {
                 axe = axe,
                 offset = offset,
-                type = JointType.Revolute
+                Type = JointType.Revolute
             };
         }
 
@@ -27,14 +27,14 @@ namespace RobotDynamics.Robots
             {
                 offset = offset,
                 linearMotionDirection = linearMotionDirection / linearMotionDirection.Magnitude,
-                type = JointType.Linear
+                Type = JointType.Linear
             };
         }
 
         char axe;
-        JointType type;
-        Vector offset;
-        Vector linearMotionDirection;
+        public JointType Type { get; private set; }
+        public Vector offset { get; private set; }
+        public Vector linearMotionDirection { get; private set; }
 
         double lastQ = -100;
         HomogenousTransformation lastHT = null;
@@ -44,7 +44,7 @@ namespace RobotDynamics.Robots
             if (lastQ == q) return lastHT;
 
             HomogenousTransformation HT;
-            if (type == JointType.Revolute)
+            if (Type == JointType.Revolute)
             {
                 HT = new HomogenousTransformation(new RotationMatrix(q, axe), offset);
             }

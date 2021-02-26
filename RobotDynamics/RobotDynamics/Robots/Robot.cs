@@ -13,7 +13,7 @@ namespace RobotDynamics.Robots
         {
             T_I0 = new HomogenousTransformation(Matrix.Eye(4));
         }
-
+         
         private HomogenousTransformation T_I0;
         public List<Link> Links = new List<Link>();
         public JointController JointController { get; private set; }
@@ -23,6 +23,11 @@ namespace RobotDynamics.Robots
             Link link = Link.Revolute(axe, offset);
             Links.Add(link);
             return this;
+        }
+        public Robot AddLinearJoint(Vector offset, Vector linearMovementDirection)
+        {
+            Links.Add(Link.Linear(linearMovementDirection, offset));
+            return this; 
         }
 
         public void AttachJointController(float kp, float tolerance)
