@@ -11,7 +11,7 @@ Robot Ro = new Robot()
                 .AddJoint('x', new Vector(0, 50, 330))
                 .AddJoint('x', new Vector(0, 0, 440))
                 .AddJoint('y', new Vector(0, 100, 35))
-                .AddLinearJoint(new Vector(0, 0, 0), new Vector(0, 0.707, 707))
+                .AddLinearJoint(new Vector(0, 0, 0), new Vector(0, .707, .707))
                 .AddLinearJoint(new Vector(0, 0, 0), new Vector(1, 0, 0));
  Links = Ro.Links;
  ```
