@@ -56,15 +56,16 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio Tools for Unity\16.0\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\RobotDynamics\RevoluteRobot.cs" />
-    <Compile Include="Assets\RobotDynamics\TargetMover.cs" />
-    <Compile Include="Assets\RobotDynamics\LinearRobot.cs" />
-    <Compile Include="Assets\RobotDynamics\Joints\JointHandler.cs" />
-    <Compile Include="Assets\RobotDynamics\Extensions.cs" />
-    <Compile Include="Assets\RobotDynamics\IJoint.cs" />
-    <Compile Include="Assets\RobotDynamics\Joints\LinearJointHandler.cs" />
     <Compile Include="Assets\RobotDynamics\Joints\RevoluteJointHandler.cs" />
+    <Compile Include="Assets\RobotDynamics\LinearRobot.cs" />
+    <Compile Include="Assets\RobotDynamics\RevoluteRobot.cs" />
     <Compile Include="Assets\RobotDynamics\RobotBase.cs" />
+    <Compile Include="Assets\RobotDynamics\Joints\LinearJointHandler.cs" />
+    <Compile Include="Assets\RobotDynamics\Joints\JointHandler.cs" />
+    <Compile Include="Assets\RobotDynamics\IJoint.cs" />
+    <Compile Include="Assets\RobotDynamics\Extensions.cs" />
+    <Compile Include="Assets\RobotDynamics\TargetMover.cs" />
+    <Compile Include="Assets\Resources\MyCustomRobotHandler.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
@@ -318,6 +319,9 @@
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>Library\PackageCache\com.unity.analytics@3.5.3\Unity.Analytics.Tracker.dll</HintPath>
+    </Reference>
+    <Reference Include="InspectorGadgets.Lite">
+      <HintPath>Assets\Plugins\Inspector Gadgets\InspectorGadgets.Lite.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.2.4f1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>
@@ -741,6 +745,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
+      <Project>{75315749-5E75-29DF-7856-78AED47E279E}</Project>
+      <Name>Assembly-CSharp-firstpass</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
