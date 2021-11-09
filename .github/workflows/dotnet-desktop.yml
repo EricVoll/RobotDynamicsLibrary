@@ -57,7 +57,7 @@ jobs:
 
     env:
       Solution_Name: RobotDynamics/RobotDynamics.sln                         # Replace with your solution name, i.e. MyWpfApp.sln.
-      Test_Project_Path: RobotDynamics/RobotDynamicsTests/RobotDynamicsTests.csproj                # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
+      Test_Project_Path: RobotDynamicsTests/RobotDynamicsTests.csproj                # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
 
     steps:
     - name: Checkout
@@ -76,8 +76,8 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
 
     # Execute all unit tests in the solution
-    #- name: Execute unit tests
-    #  run: dotnet test
+    - name: Execute unit tests
+      run: dotnet test
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
