@@ -13,6 +13,11 @@ namespace RobotDynamicsTests.RobotTests
     public class InverseKinematicsTests
     {
         [TestMethod]
+        public void FailTest(){
+            Assert.IsTrue(false);
+        }
+        
+        [TestMethod]
         public void LinearRobot()
         {
 
